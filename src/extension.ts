@@ -22,18 +22,18 @@ export function activate(context: vscode.ExtensionContext) {
 		var currentProjectDirectory:string = String(vscode.workspace.rootPath);
 	
 		console.log(`Project directory ${currentProjectDirectory}`);	
-		console.log(`Current working directory ${process.cwd()}`);
-	
-		process.chdir(currentProjectDirectory);
-		console.log(`Current working directory after chdir ${process.cwd()}`);
+		const git = simpleGit(currentProjectDirectory);
 
-		var git = simpleGit();
-		var currentBranch = '';
-		async function getCurentBranch(){
-			currentBranch = (await git.branch()).current;
-		}
-		getCurentBranch();
-		console.log(`Current branch :${currentBranch}..`);
+	
+
+		async function getCurrentBranch() {
+			git.branch().then(async (branch) => {
+				console.log(branch.current);
+				return await branch.current;
+			});
+		};
+		var branchName = getCurrentBranch();
+		console.log(`Current branch :${branchName}..`);
 	
 	});
 
