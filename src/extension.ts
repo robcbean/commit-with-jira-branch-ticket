@@ -29,11 +29,11 @@ export function activate(context: vscode.ExtensionContext) {
 		async function getCurrentBranch() {
 			git.branch().then(async (branch) => {
 				console.log(branch.current);
-				return await branch.current;
+				return branch.current;
 			});
 		};
-		var branchName = getCurrentBranch();
-		console.log(`Current branch :${branchName}..`);
+		var branchName = String(getCurrentBranch());
+		console.log(`Current branch :${branchName}..`)
 	
 	});
 
