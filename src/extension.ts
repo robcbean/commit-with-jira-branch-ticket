@@ -4,6 +4,46 @@ import * as vscode from 'vscode';
 import simpleGit, {SimpleGit} from 'simple-git';
 import { notEqual } from 'assert';
 
+async function getStringFromPalette(): Promise<string | undefined> {
+    let result = await vscode.window.showInputBox({
+        placeHolder: "Enter a string"
+    });
+    return result;
+}
+
+async function getCurrentBranch(git: SimpleGit): Promise <string | undefined> {
+
+	let result = await git.branch().then((branch) => 
+	{
+		return branch.current;
+	});
+	return result;
+}
+
+function getJiraTicketFromBranch(branch: string): string {
+	let ret:string = '';
+	const pattern = /([a-z]|[A-Z])+.[0-9]+/;
+	const match = branch.match(pattern);
+	if (match){
+		ret = match[0];
+	}
+	return ret; 
+}
+
+
+async function writeCommit(git: SimpleGit, jiraTicket: string, commitComment: string)
+{
+	try{
+		await git.commit(`[${jiraTicket}] ${commitComment}`);
+		console.log("Commit sucessfully creaded");
+	}
+	catch(err)
+	{
+		vscode.window.showErrorMessage(String(err));
+	}
+}
+
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -16,25 +56,22 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('commit-with-jira-branch-ticket.helloWorld', () => {
+	let disposable = vscode.commands.registerCommand('commit-with-jira-branch-ticket.helloWorld', async () => {
 
 		
 		var currentProjectDirectory:string = String(vscode.workspace.rootPath);
-	
 		console.log(`Project directory ${currentProjectDirectory}`);	
 		const git = simpleGit(currentProjectDirectory);
 
-	
+		let currentBranch = await getCurrentBranch(git);
+		let jiraTicket = getJiraTicketFromBranch(String(currentBranch));
+		let commitComment = await getStringFromPalette();
 
-		async function getCurrentBranch() {
-			git.branch().then(async (branch) => {
-				console.log(branch.current);
-				return branch.current;
-			});
-		};
-		var branchName = String(getCurrentBranch());
-		console.log(`Current branch :${branchName}..`)
-	
+		console.log(`Write comment ${commitComment} to the branch ${currentBranch} for the ticket ${jiraTicket}`);
+
+		await writeCommit(git, jiraTicket, String(commitComment));
+		
+		
 	});
 
 	context.subscriptions.push(disposable);
