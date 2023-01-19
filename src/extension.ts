@@ -43,24 +43,13 @@ async function writeCommit(git: SimpleGit, jiraTicket: string, commitComment: st
 	}
 }
 
-function constainsAddTag(inputLines: string): boolean
-{
-	let ret: boolean = false;
-
-	const pattern = /^A.*(\nA.*)*/;
-	const match = inputLines.match(pattern);
-	if (match){
-		let ret = true;
-	}
-	return ret;
-}
 
 async function addedFiles(git: SimpleGit): Promise<boolean>
 {
 	let ret: boolean = false;
 
 	let result = git.status(['-s']).then((statusLines) => {
-			return constainsAddTag(String(statusLines));
+			return statusLines.staged.length > 0;
 		}
 	);
 
