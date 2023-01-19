@@ -43,6 +43,30 @@ async function writeCommit(git: SimpleGit, jiraTicket: string, commitComment: st
 	}
 }
 
+function constainsAddTag(inputLines: string): boolean
+{
+	let ret: boolean = false;
+
+	const pattern = /^A.*(\nA.*)*/;
+	const match = inputLines.match(pattern);
+	if (match){
+		let ret = true;
+	}
+	return ret;
+}
+
+async function addedFiles(git: SimpleGit): Promise<boolean>
+{
+	let ret: boolean = false;
+
+	let result = git.status(['-s']).then((statusLines) => {
+			return constainsAddTag(String(statusLines));
+		}
+	);
+
+	return ret;
+}
+
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -56,21 +80,33 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('commit-with-jira-branch-ticket.helloWorld', async () => {
+	let disposable = vscode.commands.registerCommand('commit-with-jira-branch-ticket.commitBranch', async () => {
 
 		
 		var currentProjectDirectory:string = String(vscode.workspace.rootPath);
 		console.log(`Project directory ${currentProjectDirectory}`);	
 		const git = simpleGit(currentProjectDirectory);
+		let existinsAddFiles:boolean = await addedFiles(git);
 
-		let currentBranch = await getCurrentBranch(git);
-		let jiraTicket = getJiraTicketFromBranch(String(currentBranch));
-		let commitComment = await getStringFromPalette();
+		if (existinsAddFiles){
 
-		console.log(`Write comment ${commitComment} to the branch ${currentBranch} for the ticket ${jiraTicket}`);
+			let currentBranch = await getCurrentBranch(git);
+			let jiraTicket = getJiraTicketFromBranch(String(currentBranch));
+			let commitComment = await getStringFromPalette();
 
-		await writeCommit(git, jiraTicket, String(commitComment));
-		
+			if (commitComment === undefined || commitComment === "" )
+			{
+				vscode.window.showErrorMessage("Commit comment it's empty");
+			}
+			else 
+			{
+				console.log(`Write comment ${commitComment} to the branch ${currentBranch} for the ticket ${jiraTicket}`);
+				await writeCommit(git, jiraTicket, String(commitComment));
+			}
+
+		}else{
+			vscode.window.showErrorMessage("No files added.");
+		}
 		
 	});
 
