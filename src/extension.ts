@@ -46,13 +46,13 @@ async function writeCommit(git: SimpleGit, jiraTicket: string, commitComment: st
 
 async function addedFiles(git: SimpleGit): Promise<boolean>
 {
-	let ret: boolean = false;
 
-	let result = git.status(['-s']).then((statusLines) => {
-			return statusLines.staged.length > 0;
+	let ret = await git.status(['-s']).then((statusLines) => {
+			let ret = statusLines.staged.length > 0;
+			return ret;
 		}
 	);
-
+	
 	return ret;
 }
 
