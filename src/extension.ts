@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import simpleGit, {SimpleGit} from 'simple-git';
 import {getJiraList} from './jira_api';
+import config from 'simple-git/dist/src/lib/tasks/config';
 
 async function getStringFromPalette(): Promise<string | undefined> {
     let result = await vscode.window.showInputBox({
@@ -75,8 +76,16 @@ export function activate(context: vscode.ExtensionContext) {
 		
 		var currentProjectDirectory:string = String(vscode.workspace.rootPath);
 		console.log(`Project directory ${currentProjectDirectory}`);	
+
+		console.log("Getting configuration");
+		const config = vscode.workspace.getConfiguration("commit-with-jira-branch-ticket");		
+		console.log(`Configuration:${config}`);
+
 		const git = simpleGit(currentProjectDirectory);
 		let existinsAddFiles:boolean = await addedFiles(git);
+
+
+		
 
 		if (existinsAddFiles){
 

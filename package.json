@@ -1,4 +1,3 @@
-
 {
   "name": "commit-with-jira-branch-ticket",
   "displayName": "Commit with Jira Branch Ticket",
@@ -12,24 +11,24 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "configuration":{
-      "title": "commit-with-jira-branch-ticket",
-        "properties": {
-          "commit-with-jira-branch-ticket.user_name" : {
-            "type":"string",
-            "default": "",
-            "description": "User name"
-          },
-          "commit-with-jira-branch-ticket.user_token" : {
-            "type":"string",
-            "default": "",
-            "description": "Jira token password"
-          },
-          "commit-with-jira-branch-ticket.domain" : {
-            "type":"string",
-            "default": "",
-            "description": "Jura domain"
-          }
+    "configuration": {
+      "title": "Commit with Jira Branch Ticket",
+      "properties": {
+        "commit-with-jira-branch-ticket.user_name": {
+          "type": "string",
+          "default": "",
+          "description": "User name"
+        },
+        "commit-with-jira-branch-ticket.user_token": {
+          "type": "string",
+          "default": "",
+          "description": "Jira token password"
+        },
+        "commit-with-jira-branch-ticket.domain": {
+          "type": "string",
+          "default": "",
+          "description": "Jira domain"
+        }
       }
     },
     "commands": [
@@ -58,6 +57,7 @@
     "eslint": "^8.36.0",
     "glob": "^9.2.1",
     "mocha": "^10.2.0",
+    "simple-git": "^3.17.0",
     "typescript": "^4.9.5"
   },
   "dependencies": {
