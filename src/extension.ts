@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import simpleGit, {SimpleGit} from 'simple-git';
-import { notEqual } from 'assert';
+import {getJiraList} from './jira_api';
 
 async function getStringFromPalette(): Promise<string | undefined> {
     let result = await vscode.window.showInputBox({
