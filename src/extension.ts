@@ -11,6 +11,7 @@ async function getStringFromPalette(): Promise<string | undefined> {
     return result;
 }
 
+
 async function getCurrentBranch(git: SimpleGit): Promise <string | undefined> {
 
 	let result = await git.branch().then((branch) => 

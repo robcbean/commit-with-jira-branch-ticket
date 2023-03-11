@@ -10,9 +10,6 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:commit-with-jira-branch-ticket.commitBranch"
-  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
