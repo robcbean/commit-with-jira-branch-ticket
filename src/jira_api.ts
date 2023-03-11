@@ -28,7 +28,7 @@ function generateSearchURL(userDomain:string, searchString:string): string
     return ret;
 }
 
-async function getJiraList(userDomain:string, userName:string, userToken:string): Promise<{[key: string]: string}[]>
+export async function getJiraList(userDomain:string, userName:string, userToken:string): Promise<{[key: string]: string}[]>
 {
     let ret:{[key: string]: string}[] = [];
     const requestOptions: RequestInit = {
