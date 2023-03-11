@@ -67,9 +67,6 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "commit-with-jira-branch-ticket" is now active!');
 
-	console.log('Getting configuration\n');
-	var config = vscode.workspace.getConfiguration('commit-with-jira-branch-ticket');		
-	console.log(`Configuration:${config}\n`);
 
 
 	// The command has been defined in the package.json file
@@ -77,7 +74,17 @@ export function activate(context: vscode.ExtensionContext) {
 	// The commandId parameter must match the command field in package.json
 	let disposable = vscode.commands.registerCommand('commit-with-jira-branch-ticket.commitBranch', async () => {
 
+		console.log('Getting configuration\n');
 
+		var config:vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration('commit-with-jira-branch-ticket');		
+
+		const userName:string = config["user_name"];
+		const userDomain: string = config["domain"];
+		const userToken: string = config["user_token"];
+
+		console.log(`user_name ${userName}, domain:${userDomain}`);
+		
+	
 		
 		var currentProjectDirectory:string = String(vscode.workspace.rootPath);
 		console.log(`Project directory ${currentProjectDirectory}\n`);	
