@@ -1,3 +1,5 @@
+
+
 function generateCredentialString(user_name:string, user_token:string): string 
 {
     const credentials:string = `${user_name}:${user_token}`;
@@ -8,6 +10,7 @@ function generateCredentialString(user_name:string, user_token:string): string
 
 function generateRequestHeader(user_name:string, user_token:string): Headers
 {
+    
     let ret_headers: Headers = new Headers();
 
     ret_headers.append("Content-Type", "application/json");
