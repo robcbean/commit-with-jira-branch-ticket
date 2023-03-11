@@ -11,14 +11,14 @@ function generateCredentialString(user_name:string, user_token:string): string
 function generateRequestHeader(user_name:string, user_token:string): Headers
 {
     
-    let ret_headers: Headers = new Headers();
+    let retHeaders: Headers = new Headers();
 
-    ret_headers.append("Content-Type", "application/json");
-    ret_headers.append("Accept", "application/json");
-    ret_headers.append("Authorization", `Basic ${generateCredentialString(user_name,user_token)}`);
+    retHeaders.append("Content-Type", "application/json");
+    retHeaders.append("Accept", "application/json");
+    retHeaders.append("Authorization", `Basic ${generateCredentialString(user_name,user_token)}`);
 
 
-    return ret_headers;
+    return retHeaders;
 }
 
 function generateSearchURL(user_domain:string, search_string:string): string 
