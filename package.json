@@ -12,6 +12,26 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration":{
+      "title": "commit-with-jira-branch-ticket",
+        "properties": {
+          "commit-with-jira-branch-ticket.user_name" : {
+            "type":"string",
+            "default": "",
+            "description": "User name"
+          },
+          "commit-with-jira-branch-ticket.user_token" : {
+            "type":"string",
+            "default": "",
+            "description": "Jira token password"
+          },
+          "commit-with-jira-branch-ticket.domain" : {
+            "type":"string",
+            "default": "",
+            "description": "Jura domain"
+          }
+      }
+    },
     "commands": [
       {
         "command": "commit-with-jira-branch-ticket.commitBranch",
