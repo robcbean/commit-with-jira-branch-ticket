@@ -1,3 +1,4 @@
+
 {
   "name": "commit-with-jira-branch-ticket",
   "displayName": "Commit with Jira Branch Ticket",
@@ -20,6 +21,26 @@
         "title": "Commit With Branch"
       }
     ]
+    ,"configuration" : [
+      {
+        "title": "Commit With Jira Branch Ticket",
+        "properties": {
+          "commit-with-jira-branch-ticket.jira_user": {
+            "description": "Jira User",
+            "type": "string",
+            "default": ""
+          },
+          "commit-with-jira-branch-ticket.jira_token": {
+            "description": "Jira Token",               
+            "type" : "string",
+            "default" : ""
+        },  
+        "commit-with-jira-branch-ticket.jira_project": {
+          "description": "Jira Project",
+          "type": "string",
+          "default": ""
+        }
+      }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
