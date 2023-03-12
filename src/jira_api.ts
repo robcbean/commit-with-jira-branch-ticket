@@ -1,4 +1,7 @@
 
+import { Hash } from "crypto";
+import { AnyARecord } from "dns";
+import { type } from "os";
 
 function generateCredentialString(userName:string, userToken:string): string 
 {
@@ -42,6 +45,7 @@ export async function getJiraList(userDomain:string, userName:string, userToken:
     const response = await fetch(
         generateSearchURL(userDomain, 'status!="Done" '),requestOptions
     );
+
 
     const jsonValue = await response.json();
 
