@@ -3,7 +3,6 @@
 import * as vscode from 'vscode';
 import simpleGit, {SimpleGit} from 'simple-git';
 import {getJiraList} from './jira_api';
-import config from 'simple-git/dist/src/lib/tasks/config';
 
 async function getStringFromPalette(): Promise<string | undefined> {
     let result = await vscode.window.showInputBox({
@@ -83,8 +82,16 @@ export function activate(context: vscode.ExtensionContext) {
 		const userToken: string = config["user_token"];
 
 		console.log(`user_name ${userName}, domain:${userDomain}`);
+
+		getJiraList(userName, userDomain, userToken).then( jiraTaks => {
+				console.log(jiraTaks);
+			}
+		).catch(
+			error => {
+				console.log(console.error());
+			}
+		);
 		
-	
 		
 		var currentProjectDirectory:string = String(vscode.workspace.rootPath);
 		console.log(`Project directory ${currentProjectDirectory}\n`);	

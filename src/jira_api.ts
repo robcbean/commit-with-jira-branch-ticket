@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import { config } from "process";
+
 
 
 function generateCredentialString(userName:string, userToken:string): string 
@@ -31,7 +31,7 @@ function generateSearchURL(userDomain:string, searchString:string): string
     return ret;
 }
 
-async function getJiraList(userDomain:string, userName:string, userToken:string): Promise<{[key: string]: string}[]>
+export async function getJiraList(userDomain:string, userName:string, userToken:string): Promise<{[key: string]: string}[]>
 {
     let ret:{[key: string]: string}[] = [];
     let config:any = generateRequestHeader(userName, userToken);
@@ -45,14 +45,3 @@ async function getJiraList(userDomain:string, userName:string, userToken:string)
     );
     return ret;
 }
-    
-
-const USER_DOMAIN:string = "robertobean.atlassian.net";
-const USER_NAME:string = "robcbean@gmail.com";
-const JIRA_TOKEN:string = process.env.JIRA_TOKEN;
-
-getJiraList(USER_DOMAIN, USER_NAME, JIRA_TOKEN).then(jiraTasks =>{
-    console.log(jiraTasks);
-}).catch( error => {
-    console.log(console.error());
-});
