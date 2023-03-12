@@ -31,9 +31,9 @@ function generateSearchURL(userDomain:string, searchString:string): string
     return ret;
 }
 
-export async function getJiraList(userDomain:string, userName:string, userToken:string): Promise<{[key: string]: string}[]>
+export async function getJiraList(userDomain:string, userName:string, userToken:string): Promise<{string: string}[]>
 {
-    let ret:{[key: string]: string}[] = [];
+    let ret: {string: string}[] = [];
     let config:any = generateRequestHeader(userName, userToken);
 
     const response = await axios.get(generateSearchURL(userDomain, 'status!="Done" '), config);

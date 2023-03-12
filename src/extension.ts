@@ -57,6 +57,24 @@ async function addedFiles(git: SimpleGit): Promise<boolean>
 	return ret;
 }
 
+function convertJiraListQuickPickList(jiraList: {string: string}[]): []
+{
+	let retQuickPickList: [] = null;
+	let key:string = null;
+
+	for( key in jiraList){
+		
+		const desc: string = jiraList[key];
+		const item = {label: key, description: desc};
+
+		//const jiraDescription: string = jiraList[key];
+		//const item = {label: key, description: jiraDescription};
+		//retQuickPickList.push(item);
+	}
+
+	return retQuickPickList;
+}
+
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -81,17 +99,11 @@ export function activate(context: vscode.ExtensionContext) {
 		const userDomain: string = config["domain"];
 		const userToken: string = config["user_token"];
 
-		console.log(`user_name ${userName}, domain:${userDomain}`);
-
-		getJiraList(userName, userDomain, userToken).then( jiraTaks => {
-				console.log(jiraTaks);
-			}
-		).catch(
-			error => {
-				console.log(console.error());
-			}
-		);
-		
+		console.log(`Getting task list user_name:${userName} and domain:${userDomain}`);
+		let jiraList: {string: string}[] = await getJiraList(userDomain, userName, userToken);
+		convertJiraListQuickPickList(jiraList);
+		console.log(jiraList);
+				
 		
 		var currentProjectDirectory:string = String(vscode.workspace.rootPath);
 		console.log(`Project directory ${currentProjectDirectory}\n`);	
@@ -99,8 +111,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const git = simpleGit(currentProjectDirectory);
 		let existinsAddFiles:boolean = await addedFiles(git);
-
-
 		
 
 		if (existinsAddFiles){
