@@ -1,7 +1,7 @@
 
-import { Hash } from "crypto";
-import { AnyARecord } from "dns";
-import { type } from "os";
+import axios from "axios";
+import { config } from "process";
+
 
 function generateCredentialString(userName:string, userToken:string): string 
 {
@@ -11,15 +11,15 @@ function generateCredentialString(userName:string, userToken:string): string
     return ret;
 }
 
-function generateRequestHeader(userName:string, userToken:string): Headers
+function generateRequestHeader(userName:string, userToken:string): any
 {
-    
-    let retHeaders: Headers = new Headers();
-
-    retHeaders.append("Content-Type", "application/json");
-    retHeaders.append("Accept", "application/json");
-    retHeaders.append("Authorization", `Basic ${generateCredentialString(userName,userToken)}`);
-
+    let retHeaders: any = {
+        headers: {
+            "Content-Type" : "application/json",
+            "Accept": "application/json",
+            "Authorization": `Basic ${generateCredentialString(userName,userToken)}`
+        }
+    };
 
     return retHeaders;
 }
@@ -31,24 +31,13 @@ function generateSearchURL(userDomain:string, searchString:string): string
     return ret;
 }
 
-export async function getJiraList(userDomain:string, userName:string, userToken:string): Promise<{[key: string]: string}[]>
+async function getJiraList(userDomain:string, userName:string, userToken:string): Promise<{[key: string]: string}[]>
 {
     let ret:{[key: string]: string}[] = [];
-    const requestOptions: RequestInit = {
-        method: "GET",
-        headers: generateRequestHeader(userName, userToken)
-    };
+    let config:any = generateRequestHeader(userName, userToken);
 
-
-
-
-    const response = await fetch(
-        generateSearchURL(userDomain, 'status!="Done" '),requestOptions
-    );
-
-
-    const jsonValue = await response.json();
-
+    const response = await axios.get(generateSearchURL(userDomain, 'status!="Done" '), config);
+    const jsonValue = await response.data;
 
     jsonValue['issues'].forEach( issue => {
             ret[issue['key']] = issue['fields']['summary'];
@@ -57,3 +46,13 @@ export async function getJiraList(userDomain:string, userName:string, userToken:
     return ret;
 }
     
+
+const USER_DOMAIN:string = "robertobean.atlassian.net";
+const USER_NAME:string = "robcbean@gmail.com";
+const JIRA_TOKEN:string = process.env.JIRA_TOKEN;
+
+getJiraList(USER_DOMAIN, USER_NAME, JIRA_TOKEN).then(jiraTasks =>{
+    console.log(jiraTasks);
+}).catch( error => {
+    console.log(console.error());
+});
