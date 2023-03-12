@@ -31,16 +31,23 @@ function generateSearchURL(userDomain:string, searchString:string): string
     return ret;
 }
 
-export async function getJiraList(userDomain:string, userName:string, userToken:string): Promise<{string: string}[]>
+export type JiraTask = {
+    label: string,
+    description: string
+};
+
+
+export async function getJiraList(userDomain:string, userName:string, userToken:string): Promise<JiraTask[]>
 {
-    let ret: {string: string}[] = [];
+    let ret: JiraTask[] = [];
     let config:any = generateRequestHeader(userName, userToken);
 
     const response = await axios.get(generateSearchURL(userDomain, 'status!="Done" '), config);
     const jsonValue = await response.data;
 
     jsonValue['issues'].forEach( issue => {
-            ret[issue['key']] = issue['fields']['summary'];
+            let task:JiraTask = {label:issue['key'],description:issue['fields']['summary']};
+            ret.push(task);
         }
     );
     return ret;
