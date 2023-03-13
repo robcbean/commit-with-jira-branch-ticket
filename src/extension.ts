@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import simpleGit, {SimpleGit} from 'simple-git';
 import {getJiraList, JiraTask} from './jira_api';
+import {getCurrentBranch, getJiraTicketFromBranch, writeCommit, addedFiles, createBranch} from './git_api';
 
 async function getStringFromPalette(): Promise<string | undefined> {
     let result = await vscode.window.showInputBox({
@@ -12,50 +13,6 @@ async function getStringFromPalette(): Promise<string | undefined> {
 }
 
 
-async function getCurrentBranch(git: SimpleGit): Promise <string | undefined> {
-
-	let result = await git.branch().then((branch) => 
-	{
-		return branch.current;
-	});
-	return result;
-}
-
-function getJiraTicketFromBranch(branch: string): string {
-	let ret:string = '';
-	const pattern = /([a-z]|[A-Z])+.[0-9]+/;
-	const match = branch.match(pattern);
-	if (match){
-		ret = match[0];
-	}
-	return ret; 
-}
-
-
-async function writeCommit(git: SimpleGit, jiraTicket: string, commitComment: string)
-{
-	try{
-		await git.commit(`[${jiraTicket}] ${commitComment}`);
-		console.log("Commit sucessfully creaded");
-	}
-	catch(err)
-	{
-		vscode.window.showErrorMessage(String(err));
-	}
-}
-
-
-async function addedFiles(git: SimpleGit): Promise<boolean>
-{
-
-	let ret = await git.status(['-s']).then((statusLines) => {
-			let ret = statusLines.staged.length > 0;
-			return ret;
-		}
-	);
-	
-	return ret;
-}
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -66,24 +23,21 @@ export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "commit-with-jira-branch-ticket" is now active!');
 
 
+	const currentProjectDirectory:string = String(vscode.workspace.rootPath);
+	const git = simpleGit(currentProjectDirectory);
+
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('commit-with-jira-branch-ticket.commitBranch', async () => {
+	let disposableCommit:vscode.Disposable = vscode.commands.registerCommand('commit-with-jira-branch-ticket.commitBranch', async () => {
 
-	let selectedTask:vscode.QuickPickItem =	await selectJiraTask();
 		
-				
-	const currentProjectDirectory:string = String(vscode.workspace.rootPath);
 	console.log(`Project directory ${currentProjectDirectory}\n`);	
-
-	const git = simpleGit(currentProjectDirectory);
 	let existinsAddFiles:boolean = await addedFiles(git);
 		
 
 	if (existinsAddFiles){
-
 		let currentBranch = await getCurrentBranch(git);
 		let jiraTicket = getJiraTicketFromBranch(String(currentBranch));
 		let commitComment = await getStringFromPalette();
@@ -104,8 +58,28 @@ export function activate(context: vscode.ExtensionContext) {
 		
 	});
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(disposableCommit);
+
+	let disposableCreateBranch:vscode.Disposable = vscode.commands.registerCommand('commit-with-jira-branch-ticket.createBranch', async () => {
+
+		let selectedItem = await selectJiraTask();
+
+		const taskId: string = selectedItem.label;
+		const taksDescription: string = selectedItem.description;
+
+		console.log(`Selected taskid ${taskId} - ${taksDescription}`);
+
+		createBranch(git, taskId, taksDescription);
+
+
+	});
+
+	context.subscriptions.push(disposableCreateBranch);
+
+
 }
+
+
 
 async function selectJiraTask(): Promise<vscode.QuickPickItem> {
 	console.log('Getting configuration\n');
