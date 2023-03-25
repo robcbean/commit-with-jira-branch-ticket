@@ -1,9 +1,8 @@
 # commit-with-jira-branch-ticket README
 
-This is the README for your extension "commit-with-jira-branch-ticket". After writing up a brief description, we recommend including the following sections.
+"commit-with-jira-branch-ticket". This extension automates the process of creating a new branch in your Git repository using the JIRA ticket number as the branch name.
 
 ## Features
-
 
 ![Extension options](images/options.png)
 
