@@ -34,11 +34,11 @@
     "commands": [
       {
         "command": "commit-with-jira-branch-ticket.commitBranch",
-        "title": "Commit with branch"
+        "title": "Jira GitHub: Commit with branch"
       },
       {
         "command": "commit-with-jira-branch-ticket.createBranch",
-        "title": "Create a new branch"
+        "title": "Jira GitHub: Create a new branch from jira ticket"
       }
     ]
   },

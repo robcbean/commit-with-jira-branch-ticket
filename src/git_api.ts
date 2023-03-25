@@ -51,22 +51,45 @@ function getBranchName(taskId:string, taksDescription:string): string
 {
     let ret:string = `${taskId.toLowerCase()}_${taksDescription.toLowerCase()}`.replace(/[\s]/g,'_');
 	
-	ret = ret.replace(/-/g,'_')
+	ret = ret.replace(/-/g,'_');
 
     return ret;
 }
+
+async function existsBranch(git: SimpleGit, branchName:string):Promise<boolean>
+{
+	let retExistsBranch: boolean = false;
+	let remoteList:string = null;
+	await git.listRemote(['--heads'],(error, remote)=> {
+			if (error){
+				console.log(error);
+				return;
+			}else{
+				remoteList = remote;
+			}
+		}
+	);
+	retExistsBranch = remoteList.includes(`refs/heads/${branchName}`);
+	return retExistsBranch;
+}
+
+
 export async function createBranch(git: SimpleGit, taskId:string, takDescription:string)
 {
 
 	const curretWorkingDirectory: string = vscode.workspace.rootPath;
 	const branchName:string = getBranchName(taskId,takDescription);
 
-	console.log(`Current working directory ${curretWorkingDirectory}`)
-	console.log(`Branch name ${branchName}`)
+	console.log(`Current working directory ${curretWorkingDirectory}`);
+	console.log(`Branch name ${branchName}`);
 
-	await git.branch([branchName])
-	await git.checkout([branchName])
+	let branchExists:boolean = await existsBranch(git, branchName);
 
-	//await git.checkoutBranch(branchName, vscode.workspace.rootPath)
+	if (branchExists){
+		vscode.window.showErrorMessage(`The branch named ${branchName} already exists`);
+	}else{
+		await git.branch([branchName]);
+		await git.checkout([branchName]);
+	}
 
 }

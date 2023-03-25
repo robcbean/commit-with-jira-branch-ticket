@@ -42,7 +42,7 @@ export async function getJiraList(userDomain:string, userName:string, userToken:
     let ret: JiraTask[] = [];
     let config:any = generateRequestHeader(userName, userToken);
 
-    const response = await axios.get(generateSearchURL(userDomain, 'status!="Done" '), config);
+    const response = await axios.get(generateSearchURL(userDomain, 'status!="Done" and  assignee=currentUser()'), config);
     const jsonValue = await response.data;
 
     jsonValue['issues'].forEach( issue => {

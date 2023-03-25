@@ -53,7 +53,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 	}else{
-		vscode.window.showErrorMessage("No files added.");
+		vscode.window.showErrorMessage("No staged files. Before commit stage the files.");
 	}
 		
 	});
