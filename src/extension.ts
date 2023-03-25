@@ -68,8 +68,9 @@ export function activate(context: vscode.ExtensionContext) {
 		const taksDescription: string = selectedItem.description;
 
 		console.log(`Selected taskid ${taskId} - ${taksDescription}`);
+		console.log(`Current task description ${taksDescription}`)
 
-		createBranch(git, taskId, taksDescription);
+		await createBranch(git, taskId, taksDescription);
 
 
 	});

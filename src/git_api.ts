@@ -49,11 +49,24 @@ export async function addedFiles(git: SimpleGit): Promise<boolean>
 
 function getBranchName(taskId:string, taksDescription:string): string
 {
-    const ret:string = `${taskId.toLowerCase()}_${taksDescription.toLowerCase()}`.replace(/[^\s]/g,'_');
+    let ret:string = `${taskId.toLowerCase()}_${taksDescription.toLowerCase()}`.replace(/[\s]/g,'_');
+	
+	ret = ret.replace(/-/g,'_')
 
     return ret;
 }
-export function createBranch(git: SimpleGit, taskId:string, takDescription:string)
+export async function createBranch(git: SimpleGit, taskId:string, takDescription:string)
 {
-    git.checkoutLocalBranch(getBranchName(taskId,takDescription));
+
+	const curretWorkingDirectory: string = vscode.workspace.rootPath;
+	const branchName:string = getBranchName(taskId,takDescription);
+
+	console.log(`Current working directory ${curretWorkingDirectory}`)
+	console.log(`Branch name ${branchName}`)
+
+	await git.branch([branchName])
+	await git.checkout([branchName])
+
+	//await git.checkoutBranch(branchName, vscode.workspace.rootPath)
+
 }
