@@ -1,8 +1,8 @@
 {
   "name": "commit-with-jira-branch-ticket",
-  "displayName": "Commit with Jira Branch Ticket",
-  "description": "Commits adding the jira ticket ",
-  "version": "0.0.1",
+  "displayName": "Create/Commit branches using a Jira Ticket",
+  "description": "Create/Commit branches using a Jira Ticket",
+  "version": "0.0.5",
   "engines": {
     "vscode": "^1.76.0"
   },
@@ -12,7 +12,7 @@
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
-      "title": "Commit with Jira Branch Ticket",
+      "title": "Create/Commit branches using a Jira Ticket",
       "properties": {
         "commit-with-jira-branch-ticket.user_name": {
           "type": "string",
@@ -77,4 +77,8 @@
     "url": "https://github.com/robcbean/commit-with-jira-branch-ticket"
   }
   ,"publisher": "RobertoBeanCastello"
+  , "files": [
+    "README.md",
+    "images/**"
+  ]
 }
