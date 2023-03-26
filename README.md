@@ -32,6 +32,6 @@ This extension contributes the following settings:
 To use the commit is mandatory to have staged files.
 ## Release Notes
 
-### 0.0.6
+### 0.0.7
 
 Initial release, create a github branch selecting active jira tickets and adds jira ticket to the commit comments.
