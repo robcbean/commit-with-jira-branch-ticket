@@ -77,4 +77,8 @@
     "url": "https://github.com/robcbean/commit-with-jira-branch-ticket"
   }
   ,"publisher": "RobertoBeanCastello"
+  , "files": [
+    "README.md",
+    "images/**"
+  ]
 }
