@@ -4,7 +4,7 @@
 
 ## Features
 
-![Extension options](images/options.png)
+![Extension options](https://github.com/robcbean/commit-with-jira-branch-ticket/raw/main/images/options.png)
 
 1. Create a new branch based on jira ticket, to do this 
 
